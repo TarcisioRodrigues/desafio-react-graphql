@@ -1,0 +1,13 @@
+{
+  "name": "api_graphQL",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+  "scripts": {
+    "dev:simple":"tsnd --respawn --transpile-only ./src/simple-server.ts"
+  }
+}
