@@ -1,75 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   DragDropContext,
-  Droppable,
   Draggable,
-  DropResult,
+  Droppable
 } from "react-beautiful-dnd";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
-interface Task {
-  id: string;
-  content: string;
-}
 
-interface TaskMap {
-  [key: string]: Task[];
-}
 
-const initialTasks: TaskMap = {
-  fazer: [
-    { id: "skil", content: "Tarefa 1" },
-    { id: "slqew", content: "Tarefa 2" },
-    { id: "pae", content: "Tarefa 3" },
-  ],
-  progresso: [],
-  concluida: [],
-};
+import { useTodoContext } from "../../context/todoContext"
 
 export const Kanban: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskMap>(initialTasks);
-  const getCount = (columnId: string) => tasks[columnId].length;
-  const [columns, setColumns] = useState<string[]>(Object.keys(initialTasks));
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-  
-    if (!destination) return;
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    ) return;
-  
-    const sourceTasks = [...tasks[source.droppableId]];
-    const destinationTasks = [...tasks[destination.droppableId]];
-  
-   
-    const [removed] = sourceTasks.splice(source.index, 1);
-  
-    destinationTasks.splice(destination.index, 0, removed);
-  
-    setTasks(prevTasks => ({
-      ...prevTasks,
-      [source.droppableId]: sourceTasks,
-      [destination.droppableId]: destinationTasks,
-    }));
-  };
-  const addColumn = () => {
-    const newColumnId = `col-${columns.length + 1}`;
-    setColumns([...columns, newColumnId]);
-    setTasks(prevTasks => ({ ...prevTasks, [newColumnId]: [] }));
-  };  
-  const removeColumn = (columnId: string) => {
-    const updatedColumns = columns.filter(col => col !== columnId);
-    const updatedTasks = { ...tasks };
-    if(columns.length===3){
-      return 
-    }else{
-      delete updatedTasks[columnId];
-    setColumns(updatedColumns);
-    setTasks(updatedTasks);
-    }
-  };
+  const {addColumn,onDragEnd,removeColumn,tasks,getCount}=useTodoContext()
   return (
     <>
     <div className="flex justify-end mb-5">
