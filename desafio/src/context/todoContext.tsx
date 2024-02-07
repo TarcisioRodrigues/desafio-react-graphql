@@ -1,3 +1,5 @@
+import { client } from '../src/lib/apollo';
+import { gql } from '@apollo/client';
 import React, { createContext, useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 
@@ -20,19 +22,20 @@ interface TodoContextType {
   tasksCount:number[]
 }
 
-const initialTasks: TaskMap = {
-  todo: [
-    { id: "task-1", content: 'Tarefa 1' },
-    { id: "task-2", content: 'Tarefa 2' },
-    { id: "task-3", content: 'Tarefa 3' },
-  ],
-  inProgress: [],
-  done: [],
-};
+
+
+const GET_TASKS = gql`
+  query {
+    listtasks {
+      id
+      content
+    }
+  }
+`;
 
 const TodoContext = createContext<TodoContextType>({
-  tasks: initialTasks,
-  columns: Object.keys(initialTasks),
+  tasks: {},
+  columns: Object.keys([]),
   onDragEnd: () => {},
   addColumn: () => {},
   removeColumn: () => {},
@@ -42,10 +45,10 @@ const TodoContext = createContext<TodoContextType>({
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  const [tasks, setTasks] = useState<TaskMap>(initialTasks);
+  const [tasks, setTasks] = useState<TaskMap>({});
   const [tasksCount, setTasksCount] = useState<number[]>([]);
   const getCount = (columnId: string) => tasks[columnId].length;
-  const [columns, setColumns] = useState<string[]>(Object.keys(initialTasks));
+  const [columns, setColumns] = useState<string[]>(Object.keys([]));
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -87,6 +90,32 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     const updatedTasksCount = columns.map(columnId => tasks[columnId].length);
     setTasksCount(updatedTasksCount);
   }, [tasks, columns]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        // Execute a consulta GraphQL usando o cliente Apollo
+        const { data } = await client.query({
+          query: GET_TASKS,
+        });
+        setTasks(data)
+        // Obtenha os dados da consulta
+        const tasksFromQuery: Task[] = data.listtasks;
+
+        // Inicialize o estado com os dados obtidos
+        setTasks({
+          todo: tasksFromQuery,
+          inProgress: [],
+          done: [],
+        });
+
+        setColumns(['todo', 'inProgress', 'done']);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+
+    fetchTasks(); // Chame a função para buscar os dados assim que o componente for montado
+  }, [client]);
 
   return (
     <TodoContext.Provider value={{ tasks, columns, onDragEnd, addColumn, removeColumn ,getCount,tasksCount}}>
