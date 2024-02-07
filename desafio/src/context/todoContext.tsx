@@ -93,15 +93,15 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // Execute a consulta GraphQL usando o cliente Apollo
+     
         const { data } = await client.query({
           query: GET_TASKS,
         });
         setTasks(data)
-        // Obtenha os dados da consulta
+    
         const tasksFromQuery: Task[] = data.listtasks;
 
-        // Inicialize o estado com os dados obtidos
+      
         setTasks({
           todo: tasksFromQuery,
           inProgress: [],
@@ -114,7 +114,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    fetchTasks(); // Chame a função para buscar os dados assim que o componente for montado
+    fetchTasks(); 
   }, [client]);
 
   return (

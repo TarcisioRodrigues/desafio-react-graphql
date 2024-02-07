@@ -39,7 +39,7 @@ export const Kanban: React.FC = () => {
                 >
                   {tasks[columnId].map((task, index) => (
                   <Draggable
-                  key={task.id.toString()}
+                  key={task.id}
                   draggableId={task.id.toString()}
                   index={index}
                   
