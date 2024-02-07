@@ -1,12 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { useTodoContext } from "../../context/todoContext"
+import { useTodoContext } from "../../context/todoContext";
 export const PieChart: React.FC = () => {
-  const {tasksCount,columns}=useTodoContext()
-  
- 
+  const { tasksCount, columns } = useTodoContext();
+
   const options: ApexCharts.ApexOptions = {
-    labels:columns,
+    labels: columns,
   };
 
   return (

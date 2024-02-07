@@ -1,5 +1,3 @@
-// import { client } from '../src/lib/apollo';
-// import { gql } from '@apollo/client';
 import React, { createContext, useEffect, useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
@@ -44,8 +42,7 @@ const TodoContext = createContext<TodoContextType>({
   tasksCount: [],
   createTask: () => {},
   deleteTask: () => {},
-  updateColumnName: () => {}
-
+  updateColumnName: () => {},
 });
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
@@ -92,7 +89,9 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     setTasks((prevTasks) => ({ ...prevTasks, [newColumnId]: [] }));
   };
   const updateColumnName = (columnId: string, newName: string) => {
-    setColumns(prevColumns => prevColumns.map(col => (col === columnId ? newName : col)));
+    setColumns((prevColumns) =>
+      prevColumns.map((col) => (col === columnId ? newName : col))
+    );
   };
   const removeColumn = (columnId: string) => {
     if (columns.length === 3) {

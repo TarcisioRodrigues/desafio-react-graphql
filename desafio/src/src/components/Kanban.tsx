@@ -7,7 +7,7 @@ import { FaTrash, FaPlus } from "react-icons/fa";
 
 export const Kanban: React.FC = () => {
   const [taskContent, setTaskContent] = useState("");
-  const [editedColumnName, setEditedColumnName] = useState("");
+
   const {
     addColumn,
     onDragEnd,
@@ -16,7 +16,6 @@ export const Kanban: React.FC = () => {
     getCount,
     createTask,
     deleteTask,
-    updateColumnName,
   } = useTodoContext();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +32,6 @@ export const Kanban: React.FC = () => {
   const handleDeleteTask = (id: string) => {
     deleteTask(id);
   };
-
- 
 
   return (
     <>
@@ -65,16 +62,16 @@ export const Kanban: React.FC = () => {
                 className="flex flex-col items-center gap-2 mx-2"
               >
                 <Badge className="bg-blue-500 mb-1 justify-center p-3">
-                  
-                <div className="text-center items-center"><h2 className="text-white text-lg font-bold">
-                    {columnId.toUpperCase()} ({getCount(columnId)})
-                    <Button
-                      className=" bg-transparent text-white py-2 px-4 rounded mt-2"
-                      onClick={() => removeColumn(columnId)}
-                    >
-                      <FaTrash />
-                    </Button>
-                  </h2>
+                  <div className="text-center items-center">
+                    <h2 className="text-white text-lg font-bold">
+                      {columnId.toUpperCase()} ({getCount(columnId)})
+                      <Button
+                        className=" bg-transparent text-white py-2 px-4 rounded mt-2"
+                        onClick={() => removeColumn(columnId)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </h2>
                   </div>
                 </Badge>
                 <Droppable droppableId={columnId} key={parseInt(columnId)}>
